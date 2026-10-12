@@ -6,9 +6,10 @@
 
 **Windows** : `Win+R` > `cmd` > `systeminfo`
 
-Sortie (extrait) :
+Sortie :
 
 ```text
+[...]
 Sécurité basée sur la virtualisation:   État : Non activé
                                         App Control for Business policy: Appliqué
                                         App Control for Business user mode policy: Audit
@@ -69,7 +70,7 @@ Sortie :
                9 Rép(s)  939 680 542 720 octets libres
 ```
 
-Espace libre sur `C:` : **939 680 542 720 octets (~ 875 Gio)**.
+Espace libre sur `C:` : **939 680 542 720 octets (≈ 875 Gio)**.
 
 ### 0.4 Mémoire disponible pour deux VM en parallèle
 
@@ -77,7 +78,7 @@ Espace libre sur `C:` : **939 680 542 720 octets (~ 875 Gio)**.
 systeminfo
 ```
 
-Sortie (extrait) :
+Sortie :
 
 ```text
 Mémoire physique totale:                    16 163 Mo
@@ -103,7 +104,7 @@ SHA256          97F3D7FFB032C3EB3B23D2C8BE9CC76E60C2C1F2C0146BA5BA9FE01CAFAE0FD8
 
 - Source : <https://ubuntu.com/download/server/thank-you?version=24.04.5&architecture=amd64&lts=true>
 - Somme SHA-256 officielle : `97f3d7ffb032c3eb3b23d2c8be9cc76e60c2c1f2c0146ba5ba9fe01cafae0fd8`
-- Résultat : identique.
+- Résultat : identique (la comparaison est insensible à la casse).
 
 #### RHEL 9.8
 
@@ -124,11 +125,76 @@ SHA256          18FECEFE070E9C40502287281EC86E3BD4D64E2F48796A1CB166D9371308E5E6
 ---
 
 ## 1. Périmètre
+```text
+fousta@ubuntu24-lab:~$ cat /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+fousta@ubuntu24-lab:~$ uname -r
+6.8.0-146-generic
+fousta@ubuntu24-lab:~$ hostnamectl
+ Static hostname: ubuntu24-lab
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: fbd006756f38402bbbde01d1b64dd65b
+         Boot ID: 4ede13aab76b46508aa7eb1fc9769534
+  Virtualization: vmware
+Operating System: Ubuntu 24.04.5 LTS
+          Kernel: Linux 6.8.0-146-generic
+    Architecture: x86-64
+ Hardware Vendor: VMware, Inc.
+  Hardware Model: VMware Virtual Platform
+Firmware Version: 6.00
+   Firmware Date: Thu 2020-11-12
+    Firmware Age: 5y 10month 4w 1d
+```
+```text
+[fousta@rhel9-lab ~]$ cat /etc/os-release
+NAME="Red Hat Enterprise Linux"
+VERSION="9.8 (Plow)"
+ID="rhel"
+ID_LIKE="fedora"
+VERSION_ID="9.8"
+PLATFORM_ID="platform:el9"
+PRETTY_NAME="Red Hat Enterprise Linux 9.8 (Plow)"
+ANSI_COLOR="0;31"
+LOGO="fedora-logo-icon"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:9::baseos"
+HOME_URL="https://www.redhat.com/"
+DOCUMENTATION_URL="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9"
+BUG_REPORT_URL="https://issues.redhat.com/"
 
-Distributions et versions exactes relevées sur les machines :
-
-<!-- À compléter -->
-
+REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 9"
+REDHAT_BUGZILLA_PRODUCT_VERSION=9.8
+REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="9.8"
+[fousta@rhel9-lab ~]$ uname -r
+5.14.0-687.56.1.el9_8.x86_64
+[fousta@rhel9-lab ~]$ hostnamectl
+ Static hostname: rhel9-lab
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: 9d0eca9bf6b2431aadcce38fad31f4a0
+         Boot ID: 6aa03bd14eec465298ac56abf6e5d76f
+  Virtualization: vmware
+Operating System: Red Hat Enterprise Linux 9.8 (Plow)
+     CPE OS Name: cpe:/o:redhat:enterprise_linux:9::baseos
+          Kernel: Linux 5.14.0-687.56.1.el9_8.x86_64
+    Architecture: x86-64
+ Hardware Vendor: VMware, Inc.
+  Hardware Model: VMware Virtual Platform
+Firmware Version: 6.00
+```
 ## 2. Ressources des machines virtuelles
 
 | Paramètre | rhel9-lab | ubuntu24-lab |
