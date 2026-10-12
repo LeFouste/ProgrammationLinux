@@ -9,7 +9,6 @@
 Sortie :
 
 ```text
-[...]
 Sécurité basée sur la virtualisation:   État : Non activé
                                         App Control for Business policy: Appliqué
                                         App Control for Business user mode policy: Audit
@@ -209,13 +208,35 @@ Firmware Version: 6.00
 
 ## 3. Partitionnement appliqué
 
-| Volume | Taille obtenue | Point de montage | Système de fichiers |
-|---|---|---|---|
-| … | … | … | … |
+| Volume | Point de montage | Taille rhel9-lab | Taille ubuntu24-lab | FS rhel9-lab | FS ubuntu24-lab | Utilité |
+|---|---|---|---|---|---|---|
+|/dev/sda1|/boot|1 Gio|1 Gio|xfs|ext4|Fichiers de démarrage|
+|lv_root|/|10 Gio|8 Gio|xfs|ext4|Contient le système d'exploitation et les programmes|
+|lv_var|/var|5 Gio|4 Gio|xfs|ext4|Stocke tout ce qui change au fil du temps : journaux, caches, files d'attente, bases de données de services|
+|lv_log|/var/log|3 Gio|2 Gio|xfs|ext4|Journaux des services|
+|lv_home|/home|2 Gio|2 Gio|xfs|ext4|Fichiers utilisateur x|
+|lv_swap|swap|2 Gio|2 Gio|swap|swap|Espace que Linux utilise comme extension de la mémoire vive|
+|tmpfs|/tmp|--|512 Mio|--|tmpfs|Fichiers temporaires|
+|vg_sys|--|~7 Gio|~6 Gio|--|--|Espace libre/restant|
 
 **Justification des choix :**
 
-<!-- À compléter -->
+**Pourquoi séparer /var , et surtout /var/log , du volume racine ?**  
+Une partition dédiée pour /var/log est utile pour isoler l'espace occupé par les logs et prévenir une utilisation excessive de l'espace disque qui pourrait affecter d'autres parties du système. Par exemple un service qui journalise en boucle remplit /var/log ; sans volume séparé, la racine sature et la machine ne peut plus rien écrire.
+
+**Pourquoi /boot reste-t-il une partition classique et n'est-il pas placé dans le groupe de volumes ?**  
+Dans ce cas précis, c'est utile de ne pas placer la partition /boot dans le lvm car la partition root peut avoir des caractéristiques qui ne la rendent pas bootable directement. GRUB doit lire le noyau avant que le lvm soit activé, donc une partition classique est plus simple et plus sûre.
+
+**Pourquoi 2 Gio de mémoire d'échange sur une machine de 2 Gio de mémoire vive, plutôt que 8 Gio ou rien du tout ?**  
+Dans ce cas, prévoir beaucoup plus de swap que de RAM physique (2Gio et 8Gio) est une mauvaise idée dans le sens où l'espace dans lequel la RAM va puiser se situe sur le disque dur, qui a fatalement un temps d'accès à la ressource beaucoup plus lent de la RAM physique. Le système va passer plus de temps à déplacer des données qu'à travailler, et ne rien mettre non plus est une mauvaise idée, la mémoire swap sert de filet de sécurité, éviter un plantage du système (qui n'a plus assez de RAM pour opérer), et globalement son rôle va être d'absorber des pics d'utilisation de la RAM.  
+*https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_storage_devices/getting-started-with-swap_managing-storage-devices*
+
+**Pourquoi ne pas allouer la totalité du disque, et à quoi servira l'espace restant ?**  
+L'espace restant sert à garder de la marge en cas d'évolution du système. Dans les cas où l'on a besoin d'agrandir un volume à chaud et de prendre des snapshot. 
+
+**Quel volume, d'après vous, devra être agrandi en premier sur un serveur qui tourne, et quelle opération technique faudra-t-il maîtriser pour le faire sans coupure ?**  
+Le volume à agrandir en premier sur un serveur est le volume des logs (/var/log). Il s'agit d'un volume qui se remplit avec l'activité du serveur et si ce volume sature, le service qui journalise ne peut plus écrire, parfois s'arrête, et on perd la trace de ce qui s'est passé. D'où l'intérêt, d'ailleurs, de l'avoir isolé (on limite la panne à /var/log).  
+L'opération à maitriser s'appelle le *Online Resizing*. Ici on l'opère en deux temps, on agrandit d'abord le volume logique et ensuite le système de fichiers qu'il contient, sans démonter quoi que ce soit.
 
 ## 4. Installation
 
