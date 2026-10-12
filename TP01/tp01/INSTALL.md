@@ -250,9 +250,51 @@ L'opération à maitriser s'appelle le *Online Resizing*. Ici on l'opère en deu
 
 ## 5. Mises à jour
 
-Commandes exécutées et extrait d'historique horodaté.
+```text
+fousta@ubuntu24-lab:~$ tail -20 /var/log/apt/history.log
+Install: vim:amd64 (2:9.1.0016-1ubuntu7.20), libgpm2:amd64 (1.20.7-11, automatic), vim-common:amd64 (2:9.1.0016-1ubuntu7.20, automatic), libsodium23:amd64 (1.0.18-1ubuntu0.24.04.1, automatic), vim-runtime:amd64 (2:9.1.0016-1ubuntu7.20, automatic)
+End-Date: 2026-10-12  12:31:50
 
-<!-- À compléter -->
+Start-Date: 2026-10-12  12:41:30
+Commandline: apt install iputils-ping -y
+Requested-By: fousta (1000)
+Install: iputils-ping:amd64 (3:20240117-1ubuntu0.1)
+End-Date: 2026-10-12  12:41:30
+
+Start-Date: 2026-10-12  15:35:22
+Commandline: apt install language-pack-fr
+Requested-By: fousta (1000)
+Install: language-pack-fr:amd64 (1:24.04+20260905), locales:amd64 (2.39-0ubuntu8.9, automatic), language-pack-fr-base:amd64 (1:24.04+20260905, automatic)
+End-Date: 2026-10-12  15:35:30
+
+Start-Date: 2026-10-12  17:50:45
+Commandline: apt -y upgrade
+Requested-By: fousta (1000)
+Upgrade: netplan-generator:amd64 (1.1.2-8ubuntu1~24.04.2, 1.1.2-8ubuntu1~24.04.3), krb5-locales:amd64 (1.20.1-6ubuntu2.8, 1.20.1-6ubuntu2.10), libgssapi-krb5-2:amd64 (1.20.1-6ubuntu2.8, 1.20.1-6ubuntu2.10), open-iscsi:amd64 (2.1.9-3ubuntu5.4, 2.1.9-3ubuntu5.5), libaudit-common:amd64 (1:3.1.2-2.1build1.1, 1:3.1.2-2.1ubuntu0.1), python3-netplan:amd64 (1.1.2-8ubuntu1~24.04.2, 1.1.2-8ubuntu1~24.04.3), apparmor:amd64 (4.0.1really4.0.1-0ubuntu0.24.04.7, 4.0.1really4.0.1-0ubuntu0.24.04.8), libapparmor1:amd64 (4.0.1really4.0.1-0ubuntu0.24.04.7, 4.0.1really4.0.1-0ubuntu0.24.04.8), libkrb5support0:amd64 (1.20.1-6ubuntu2.8, 1.20.1-6ubuntu2.10), libx11-data:amd64 (2:1.8.7-1build1, 2:1.8.7-1ubuntu0.1), libkrb5-3:amd64 (1.20.1-6ubuntu2.8, 1.20.1-6ubuntu2.10), libk5crypto3:amd64 (1.20.1-6ubuntu2.8, 1.20.1-6ubuntu2.10), libopeniscsiusr:amd64 (2.1.9-3ubuntu5.4, 2.1.9-3ubuntu5.5), netplan.io:amd64 (1.1.2-8ubuntu1~24.04.2, 1.1.2-8ubuntu1~24.04.3), libaudit1:amd64 (1:3.1.2-2.1build1.1, 1:3.1.2-2.1ubuntu0.1), libx11-6:amd64 (2:1.8.7-1build1, 2:1.8.7-1ubuntu0.1), libnetplan1:amd64 (1.1.2-8ubuntu1~24.04.2, 1.1.2-8ubuntu1~24.04.3)
+End-Date: 2026-10-12  17:50:57
+```
+```text
+[fousta@rhel9-lab ~]$ sudo dnf -y update
+[sudo] Mot de passe de fousta:
+Mise à jour des référentiels de gestion des abonnements.
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                                                       49 MB/s | 114 MB     00:02
+Dernière vérification de l’expiration des métadonnées effectuée il y a 0:00:02 le lun. 12 oct. 2026 17:52:41.
+Dépendances résolues.
+Rien à faire.
+Terminé!
+[fousta@rhel9-lab ~]$
+[fousta@rhel9-lab ~]$ sudo dnf history | head -20
+Mise à jour des référentiels de gestion des abonnements.
+ID     | Ligne de commande                                                                                       | Date et heure    | Action(s)      | Modifié
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+     2 | install vim -y                                                                                          | 2026-10-12 14:07 | Install        |    4  <
+     1 |                                                                                                         | 2026-10-12 13:19 | Install        |  394 >E
+[fousta@rhel9-lab ~]$ sudo dnf repolist
+Mise à jour des référentiels de gestion des abonnements.
+id du dépôt                                                        nom du dépôt
+rhel-9-for-x86_64-appstream-rpms                                   Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)
+rhel-9-for-x86_64-baseos-rpms                                      Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)
+```
 
 ## 6. Comptes et accès distant
 
