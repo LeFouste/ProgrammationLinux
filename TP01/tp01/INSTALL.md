@@ -198,8 +198,14 @@ Firmware Version: 6.00
 ## 2. Ressources des machines virtuelles
 
 | Paramètre | rhel9-lab | ubuntu24-lab |
-|---|---|---|
-| … | … | … |
+| --- | --- | --- |
+|Hyperviseur| VMware Workstation 17.5.2 | VMware Workstation 17.5.2 |
+|Image|rhel-9.8-x86_64-boot.iso|ubuntu-24.04.5-live-server-amd64.iso|
+|Processeur|2 vCPU|2 vCPU|
+|Mémoire|2048 Mio|2048 Mio|
+|Disque système|30 Gio, alloué dynamiquement|25 Gio, alloué dynamiquement|
+|Second disque|aucun (ajouté au TP 2)|aucun (ajouté au TP 2)|
+|Snapshot|avant-installation|avant-installation|
 
 ## 3. Partitionnement appliqué
 
