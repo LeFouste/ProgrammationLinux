@@ -240,9 +240,13 @@ L'opération à maitriser s'appelle le *Online Resizing*. Ici on l'opère en deu
 
 ## 4. Installation
 
-Profil, nom d'hôte, locale, fuseau horaire, horloge.
-
-<!-- À compléter -->
+| Élément | rhel9-lab | ubuntu24-lab |
+|---|---|---|
+|Profil|Séléction des logiciels > installation minimale|Ubuntu Server (minimized)|
+|Nom d'hôte|rhel9-lab|ubuntu24-lab|
+|Langue / locale|fr_FR.UTF-8|fr_FR.UTF-8 (ajoutée après installation)|
+|Clavier|fr|fr|
+|Fuseau horaire|Europe/Paris|Europe/Paris (après MàJ manuelle)|
 
 ## 5. Mises à jour
 
