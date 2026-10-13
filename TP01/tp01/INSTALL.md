@@ -6,18 +6,19 @@
 
 **Windows** : `Win+R` > `cmd` > `systeminfo`
 
-Sortie :
+Sortie (extrait) :
 
 ```text
+[...]
 Sécurité basée sur la virtualisation:   État : Non activé
                                         App Control for Business policy: Appliqué
                                         App Control for Business user mode policy: Audit
                                         Fonctionnalités de sécurité activées :
 
-Configuration requise pour Hyper-V:     Extensions de mode du moniteur d’ordinateur virtuel : Oui
+Configuration requise pour Hyper-V:     Extensions de mode du moniteur d'ordinateur virtuel : Oui
                                         Virtualisation activée dans le microprogramme : Oui
-                                        Traduction d’adresse de second niveau : Oui
-                                        Prévention de l’exécution des données disponible : Oui
+                                        Traduction d'adresse de second niveau : Oui
+                                        Prévention de l'exécution des données disponible : Oui
 ```
 
 **Linux** : dans un terminal
@@ -50,7 +51,7 @@ C:\Windows\System32>dir C:\
 Sortie :
 
 ```text
- Le volume dans le lecteur C n’a pas de nom.
+ Le volume dans le lecteur C n'a pas de nom.
  Le numéro de série du volume est 8EB4-4B2F
 
  Répertoire de C:\
@@ -77,14 +78,14 @@ Espace libre sur `C:` : **939 680 542 720 octets (≈ 875 Gio)**.
 systeminfo
 ```
 
-Sortie :
+Sortie (extrait) :
 
 ```text
 Mémoire physique totale:                    16 163 Mo
 Mémoire physique disponible:                8 917 Mo
 Mémoire virtuelle : taille maximale:        19 107 Mo
 Mémoire virtuelle : disponible:             11 408 Mo
-Mémoire virtuelle : en cours d’utilisation: 7 699 Mo
+Mémoire virtuelle : en cours d'utilisation: 7 699 Mo
 ```
 
 ### 0.5 Images d'installation téléchargées et vérifiées
@@ -197,8 +198,7 @@ Firmware Version: 6.00
 ## 2. Ressources des machines virtuelles
 
 | Paramètre | rhel9-lab | ubuntu24-lab |
-| --- | --- | --- |
-|Hyperviseur| VMware Workstation 17.5.2 | VMware Workstation 17.5.2 |
+|Hyperviseur|VMware Workstation 17.5.2|VMware Workstation 17.5.2|
 |Image|rhel-9.8-x86_64-boot.iso|ubuntu-24.04.5-live-server-amd64.iso|
 |Processeur|2 vCPU|2 vCPU|
 |Mémoire|2048 Mio|2048 Mio|
@@ -218,6 +218,11 @@ Firmware Version: 6.00
 |lv_swap|swap|2 Gio|2 Gio|swap|swap|Espace que Linux utilise comme extension de la mémoire vive|
 |tmpfs|/tmp|--|512 Mio|--|tmpfs|Fichiers temporaires|
 |vg_sys|--|~7 Gio|~6 Gio|--|--|Espace libre/restant|
+
+**Création de /tmp en tmpfs sur ubuntu*
+*sudo echo 'tmpfs  /tmp  tmpfs  defaults,noatime,nosuid,nodev,size=512M  0  0' | sudo tee -a /etc/fstab*
+*sudo systemctl daemon-reload*
+*sudo mount /tmp*
 
 **Justification des choix :**
 
@@ -248,8 +253,21 @@ L'opération à maitriser s'appelle le *Online Resizing*. Ici on l'opère en deu
 |Clavier|fr|fr|
 |Fuseau horaire|Europe/Paris|Europe/Paris (après MàJ manuelle)|
 
-## 5. Mises à jour
+Différences notées jusqu'ici entre les 2 distributions :
 
+| Opération | rhel9-lab | ubuntu24-lab | Raison |
+|---|---|---|---|
+|FS|xfs|ext4|Choix par défaut de chaque installateur|
+|Gestionnaire de paquets|dnf|apt|Familles de distributions différentes (rpm contre deb)|
+|Configuration réseau|nmcli|/etc/netplan/ puis netplan apply|Pile réseau par défaut différente|
+|Locale française|déjà disponible|language-pack-fr|Anaconda installe les paquets de langue choisis pendant l’installation, pas Subiquity|
+|Fuseau horaire|Europe/Paris déjà réglé|timedatectl set-timezone Europe/Paris|Le fuseau est demandé dans Anaconda, alors que Subiquity non|
+|/tmp en tmpfs|non demandé|ajouté à la main dans /etc/fstab|Le sujet le prévoit uniquement sur Ubuntu, et l’installateur ne gère pas ce montage|
+
+**Sur RHEL 9, le répertoire /tmp est automatiquement monté en tant que tmpfs (un système de fichiers temporaire stocké directement en RAM). C'est pourquoi on le voit immédiatement avec la commande df -hT. Sur Ubuntu, /tmp n'est pas un point de montage séparé; il s'agit simplement d'un dossier classique situé sur la racine (/).*
+
+
+## 5. Mises à jour
 ```text
 fousta@ubuntu24-lab:~$ tail -20 /var/log/apt/history.log
 Install: vim:amd64 (2:9.1.0016-1ubuntu7.20), libgpm2:amd64 (1.20.7-11, automatic), vim-common:amd64 (2:9.1.0016-1ubuntu7.20, automatic), libsodium23:amd64 (1.0.18-1ubuntu0.24.04.1, automatic), vim-runtime:amd64 (2:9.1.0016-1ubuntu7.20, automatic)
@@ -295,7 +313,6 @@ id du dépôt                                                        nom du dép
 rhel-9-for-x86_64-appstream-rpms                                   Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)
 rhel-9-for-x86_64-baseos-rpms                                      Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)
 ```
-
 ## 6. Comptes et accès distant
 
 Comptes créés, mécanisme de délégation, configuration `sshd` retenue.
