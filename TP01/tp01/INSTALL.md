@@ -6,10 +6,9 @@
 
 **Windows** : `Win+R` > `cmd` > `systeminfo`
 
-Sortie (extrait) :
+Sortie :
 
 ```text
-[...]
 Sécurité basée sur la virtualisation:   État : Non activé
                                         App Control for Business policy: Appliqué
                                         App Control for Business user mode policy: Audit
@@ -78,7 +77,7 @@ Espace libre sur `C:` : **939 680 542 720 octets (≈ 875 Gio)**.
 systeminfo
 ```
 
-Sortie (extrait) :
+Sortie :
 
 ```text
 Mémoire physique totale:                    16 163 Mo
@@ -198,6 +197,7 @@ Firmware Version: 6.00
 ## 2. Ressources des machines virtuelles
 
 | Paramètre | rhel9-lab | ubuntu24-lab |
+|---|---|---|
 |Hyperviseur|VMware Workstation 17.5.2|VMware Workstation 17.5.2|
 |Image|rhel-9.8-x86_64-boot.iso|ubuntu-24.04.5-live-server-amd64.iso|
 |Processeur|2 vCPU|2 vCPU|
