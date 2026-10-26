@@ -1,0 +1,11 @@
+[fousta@rhel9-lab ~]$ lsblk -f
+NAME                FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda
+├─sda1              xfs                        7c63443e-7a6b-4222-ae44-d94d1ab9525b    706,8M    26% /boot
+└─sda2              LVM2_member LVM2 001       zZOoZP-jy4R-tWGw-iww2-dzn4-fCRd-tF6EpS
+  ├─vg--sys-lv_root xfs                        7001df62-c1b0-4c8b-9557-fc6990a98c4d      8,3G    16% /
+  ├─vg--sys-lv_swap swap        1              ee5c3775-8692-4aea-9d1f-82b82eb0b83a                  [SWAP]
+  ├─vg--sys-lv_home xfs                        ef7a65e2-3634-4aeb-8164-61c483895dea      1,9G     2% /home
+  ├─vg--sys-lv_log  xfs                        b7823846-7f56-44f1-bf03-c83c2f332642      2,9G     2% /var/log
+  └─vg--sys-lv_var  xfs                        4a1888ec-cdfc-4cc7-9a6c-f976a734f3bc      4,4G    12% /var
+sr0
