@@ -1,0 +1,12 @@
+fousta@ubuntu24-lab:~$ lsblk -f
+NAME                FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda
+├─sda1
+├─sda2              ext4        1.0            e60deb8c-2d32-4cbc-928e-ad58ccbd0eab    707.4M    20% /boot
+└─sda3              LVM2_member LVM2 001       1KZp3m-8sjF-pbEJ-J27Y-P7WL-tk0B-03lxa3
+  ├─vg_sys-lv--root ext4        1.0            7e63e773-2a12-4ab2-ad92-ab28add0d8e0      5.1G    29% /
+  ├─vg_sys-lv--var  ext4        1.0            45465913-5f71-474c-86e6-aaddf7df6032      3.3G     9% /var
+  ├─vg_sys-lv--log  ext4        1.0            925c178e-a917-4a1a-8026-77a3cadb51f2      1.7G     4% /var/log
+  ├─vg_sys-lv--home ext4        1.0            3b55f634-bdf5-497a-99bd-3bed6ca3cad8      1.8G     0% /home
+  └─vg_sys-lv--swap swap        1              39db11be-8dac-485a-ae3f-f66e2105ddcc                  [SWAP]
+sr0
