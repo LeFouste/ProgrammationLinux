@@ -1,1 +1,143 @@
+MACHINE=rhel9-lab
+2026-10-26T20:15:27+01:00
 
+### $ uptime -s
+2026-10-26 20:13:07
+
+### $ hostnamectl | head -5
+ Static hostname: rhel9-lab
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: 9d0eca9bf6b2431aadcce38fad31f4a0
+         Boot ID: 34f85b2c6b2440e588419d4ceef896f5
+
+### $ uname -r
+5.14.0-687.56.1.el9_8.x86_64
+
+### $ lsblk -f
+NAME                FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda
+├─sda1              xfs                        7c63443e-7a6b-4222-ae44-d94d1ab9525b    706,8M    26% /boot
+└─sda2              LVM2_member LVM2 001       zZOoZP-jy4R-tWGw-iww2-dzn4-fCRd-tF6EpS
+  ├─vg--sys-lv_root xfs                        7001df62-c1b0-4c8b-9557-fc6990a98c4d      8,3G    16% /
+  ├─vg--sys-lv_swap swap        1              ee5c3775-8692-4aea-9d1f-82b82eb0b83a                  [SWAP]
+  ├─vg--sys-lv_home xfs                        ef7a65e2-3634-4aeb-8164-61c483895dea      1,9G     2% /home
+  ├─vg--sys-lv_log  xfs                        b7823846-7f56-44f1-bf03-c83c2f332642      2,9G     2% /var/log
+  └─vg--sys-lv_var  xfs                        4a1888ec-cdfc-4cc7-9a6c-f976a734f3bc      4,4G    12% /var
+sr0
+
+### $ df -hT
+Sys. de fichiers            Type     Taille Utilisé Dispo Uti% Monté sur
+devtmpfs                    devtmpfs   815M       0  815M   0% /dev
+tmpfs                       tmpfs      838M       0  838M   0% /dev/shm
+tmpfs                       tmpfs      335M    5,0M  330M   2% /run
+/dev/mapper/vg--sys-lv_root xfs         10G    1,7G  8,4G  17% /
+/dev/sda1                   xfs        960M    254M  707M  27% /boot
+/dev/mapper/vg--sys-lv_var  xfs        5,0G    583M  4,4G  12% /var
+/dev/mapper/vg--sys-lv_home xfs        2,0G     47M  1,9G   3% /home
+/dev/mapper/vg--sys-lv_log  xfs        3,0G     66M  2,9G   3% /var/log
+tmpfs                       tmpfs      168M       0  168M   0% /run/user/1000
+
+### $ swapon --show
+NAME      TYPE      SIZE USED PRIO
+/dev/dm-1 partition   2G   0B   -2
+
+### $ sudo vgs
+  VG     #PV #LV #SN Attr   VSize  VFree
+  vg-sys   1   5   0 wz--n- 22,00g    0
+
+### $ sudo lvs -o lv_name,vg_name,lv_size,lv_time
+  LV      VG     LSize  CTime
+  lv_home vg-sys  2,00g 2026-10-12 13:18:07 +0200
+  lv_log  vg-sys  3,00g 2026-10-12 13:18:07 +0200
+  lv_root vg-sys 10,00g 2026-10-12 13:18:08 +0200
+  lv_swap vg-sys  2,00g 2026-10-12 13:18:06 +0200
+  lv_var  vg-sys  5,00g 2026-10-12 13:18:08 +0200
+
+### $ findmnt --target /var/log
+TARGET   SOURCE                     FSTYPE OPTIONS
+/var/log /dev/mapper/vg--sys-lv_log xfs    rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota
+
+### $ findmnt /tmp || echo "/tmp : pas de montage dédié"
+/tmp : pas de montage dédié
+
+### $ systemctl --failed
+  UNIT LOAD ACTIVE SUB DESCRIPTION
+0 loaded units listed.
+
+### $ timedatectl status
+               Local time: lun. 2026-10-26 20:15:27 CET
+           Universal time: lun. 2026-10-26 19:15:27 UTC
+                 RTC time: lun. 2026-10-26 19:15:28
+                Time zone: Europe/Paris (CET, +0100)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
+
+### $ localectl status
+System Locale: LANG=fr_FR.UTF-8
+    VC Keymap: fr-oss
+   X11 Layout: fr
+  X11 Variant: oss
+
+### $ sudo passwd -S root
+root LK 1969-12-31 0 99999 7 -1 (Mot de passe verrouillé.)
+
+### $ id kosta; id mathis; id arsel
+uid=1001(kosta) gid=1001(kosta) groupes=1001(kosta),10(wheel)
+uid=1002(mathis) gid=1002(mathis) groupes=1002(mathis),10(wheel)
+uid=1003(arsel) gid=1003(arsel) groupes=1003(arsel),10(wheel)
+
+### $ getent group wheel sudo
+wheel:x:10:kosta,mathis,arsel
+
+### $ sudo sshd -T | grep -Ei "permitrootlogin|passwordauthentication"
+permitrootlogin without-password
+passwordauthentication yes
+
+### $ ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens33            UP             192.168.224.132/24 fe80::20c:29ff:feef:17f1/64
+ens34            UP             10.42.0.1/24 fe80::20c:29ff:feef:17fb/64
+
+### $ sudo dnf history | head -5
+Mise à jour des référentiels de gestion des abonnements.
+ID     | Ligne de commande                                                                                       | Date et heure    | Action(s)      | Modifié
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+     2 | install vim -y                                                                                          | 2026-10-12 14:07 | Install        |    4  <
+     1 |                                                                                                         | 2026-10-12 13:19 | Install        |  394 >E
+
+### $ sudo firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens33 ens34
+  sources:
+  services: cockpit dhcpv6-client ssh
+  ports:
+  protocols:
+  forward: yes
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+
+### $ sudo firewall-cmd --permanent --list-all
+public
+  target: default
+  icmp-block-inversion: no
+  interfaces:
+  sources:
+  services: cockpit dhcpv6-client ssh
+  ports:
+  protocols:
+  forward: yes
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+
+### $ getenforce
+Enforcing
