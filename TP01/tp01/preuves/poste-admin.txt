@@ -1,0 +1,140 @@
+**********************
+Début de la transcription Windows PowerShell
+Heure de début : 20261026202426
+Nom d'utilisateur : DESKTOP-45QJ3U0\fousta
+Utilisateur runAs :  DESKTOP-45QJ3U0\fousta
+Nom de la configuration : 
+Ordinateur : DESKTOP-45QJ3U0 (Microsoft Windows NT 10.0.26200.0)
+Application hôte : C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+ID de processus : 8024
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcription démarrée, le fichier de sortie est tp01\preuves\poste-admin.txt
+PS C:\WINDOWS\system32> Get-Date -Format o
+2026-10-26T20:24:26.0182031+01:00
+PS C:\WINDOWS\system32> foreach ($ip in '192.168.224.131','192.168.224.132') {
+  foreach ($u in 'kosta','mathis','arsel') {
+    ssh -t "$u@$ip" 'hostname; id; sudo -l; sudo whoami'
+  }
+  ssh -o BatchMode=yes root@$ip true
+  echo "root $ip : code $LASTEXITCODE"
+  Test-NetConnection $ip -Port 22
+}
+Enter passphrase for key 'C:\Users\fousta/.ssh/id_ed25519':
+ubuntu24-lab
+uid=1001(kosta) gid=1001(kosta) groups=1001(kosta),27(sudo),100(users)
+[sudo] password for kosta:
+Matching Defaults entries for kosta on ubuntu24-lab:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,
+    use_pty
+
+User kosta may run the following commands on ubuntu24-lab:
+    (ALL : ALL) ALL
+root
+Connection to 192.168.224.131 closed.
+Enter passphrase for key 'C:\Users\fousta/.ssh/id_ed25519':
+ubuntu24-lab
+uid=1002(mathis) gid=1002(mathis) groups=1002(mathis),27(sudo),100(users)
+[sudo] password for mathis:
+Matching Defaults entries for mathis on ubuntu24-lab:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,
+    use_pty
+
+User mathis may run the following commands on ubuntu24-lab:
+    (ALL : ALL) ALL
+root
+Connection to 192.168.224.131 closed.
+Enter passphrase for key 'C:\Users\fousta/.ssh/id_ed25519':
+ubuntu24-lab
+uid=1003(arsel) gid=1003(arsel) groups=1003(arsel),27(sudo),100(users)
+[sudo] password for arsel:
+Matching Defaults entries for arsel on ubuntu24-lab:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,
+    use_pty
+
+User arsel may run the following commands on ubuntu24-lab:
+    (ALL : ALL) ALL
+root
+Connection to 192.168.224.131 closed.
+root@192.168.224.131: Permission denied (publickey,password).
+root 192.168.224.131 : code 255
+
+
+ComputerName     : 192.168.224.131
+RemoteAddress    : 192.168.224.131
+RemotePort       : 22
+InterfaceAlias   : VMware Network Adapter VMnet8
+SourceAddress    : 192.168.224.1
+TcpTestSucceeded : True
+
+Enter passphrase for key 'C:\Users\fousta/.ssh/id_ed25519':
+rhel9-lab
+uid=1001(kosta) gid=1001(kosta) groupes=1001(kosta),10(wheel) contexte=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c
+1023
+[sudo] Mot de passe de kosta :
+Entrées Defaults correspondant pour kosta sur rhel9-lab :
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY
+    HOSTNAME HISTSIZE KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE",
+    env_keep+="LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC
+    LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY",
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+L'utilisateur kosta peut utiliser les commandes suivantes sur rhel9-lab :
+    (ALL) ALL
+root
+Connection to 192.168.224.132 closed.
+Enter passphrase for key 'C:\Users\fousta/.ssh/id_ed25519':
+rhel9-lab
+uid=1002(mathis) gid=1002(mathis) groupes=1002(mathis),10(wheel) contexte=unconfined_u:unconfined_r:unconfined_t:s0-s0:c
+0.c1023
+[sudo] Mot de passe de mathis :
+Entrées Defaults correspondant pour mathis sur rhel9-lab :
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY
+    HOSTNAME HISTSIZE KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE",
+    env_keep+="LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC
+    LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY",
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+L'utilisateur mathis peut utiliser les commandes suivantes sur rhel9-lab :
+    (ALL) ALL
+root
+Connection to 192.168.224.132 closed.
+Enter passphrase for key 'C:\Users\fousta/.ssh/id_ed25519':
+rhel9-lab
+uid=1003(arsel) gid=1003(arsel) groupes=1003(arsel),10(wheel) contexte=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c
+1023
+[sudo] Mot de passe de arsel :
+Entrées Defaults correspondant pour arsel sur rhel9-lab :
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY
+    HOSTNAME HISTSIZE KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE",
+    env_keep+="LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES", env_keep+="LC_MONETARY LC_NAME LC_NUMERIC
+    LC_PAPER LC_TELEPHONE", env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY",
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+L'utilisateur arsel peut utiliser les commandes suivantes sur rhel9-lab :
+    (ALL) ALL
+root
+Connection to 192.168.224.132 closed.
+root@192.168.224.132: Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password).
+root 192.168.224.132 : code 255
+ComputerName     : 192.168.224.132
+RemoteAddress    : 192.168.224.132
+RemotePort       : 22
+InterfaceAlias   : VMware Network Adapter VMnet8
+SourceAddress    : 192.168.224.1
+TcpTestSucceeded : True
+
+
+
+PS C:\WINDOWS\system32> Stop-Transcript
+**********************
+Fin de la transcription Windows PowerShell
+Heure de fin : 20261026202537
+**********************
