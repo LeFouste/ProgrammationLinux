@@ -1,1 +1,144 @@
+MACHINE=ubuntu24-lab
+2026-10-26T20:14:12+01:00
 
+### $ uptime -s
+2026-10-26 20:12:58
+
+### $ hostnamectl | head -5
+ Static hostname: ubuntu24-lab
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: fbd006756f38402bbbde01d1b64dd65b
+         Boot ID: 9a32c4798b6d4f05bec59b0656b1c1f5
+
+### $ uname -r
+6.8.0-147-generic
+
+### $ lsblk -f
+NAME                FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda
+├─sda1
+├─sda2              ext4        1.0            e60deb8c-2d32-4cbc-928e-ad58ccbd0eab    707.4M    20% /boot
+└─sda3              LVM2_member LVM2 001       1KZp3m-8sjF-pbEJ-J27Y-P7WL-tk0B-03lxa3
+  ├─vg_sys-lv--root ext4        1.0            7e63e773-2a12-4ab2-ad92-ab28add0d8e0      5.1G    29% /
+  ├─vg_sys-lv--var  ext4        1.0            45465913-5f71-474c-86e6-aaddf7df6032      3.3G     9% /var
+  ├─vg_sys-lv--log  ext4        1.0            925c178e-a917-4a1a-8026-77a3cadb51f2      1.7G     3% /var/log
+  ├─vg_sys-lv--home ext4        1.0            3b55f634-bdf5-497a-99bd-3bed6ca3cad8      1.8G     0% /home
+  └─vg_sys-lv--swap swap        1              39db11be-8dac-485a-ae3f-f66e2105ddcc                  [SWAP]
+sr0
+
+### $ df -hT
+Filesystem                  Type   Size  Used Avail Use% Mounted on
+tmpfs                       tmpfs  192M  984K  192M   1% /run
+/dev/mapper/vg_sys-lv--root ext4   7.8G  2.3G  5.2G  31% /
+tmpfs                       tmpfs  960M     0  960M   0% /dev/shm
+tmpfs                       tmpfs  5.0M     0  5.0M   0% /run/lock
+tmpfs                       tmpfs  512M     0  512M   0% /tmp
+/dev/mapper/vg_sys-lv--home ext4   2.0G  152K  1.8G   1% /home
+/dev/mapper/vg_sys-lv--var  ext4   3.9G  372M  3.3G  10% /var
+/dev/sda2                   ext4   974M  199M  708M  22% /boot
+/dev/mapper/vg_sys-lv--log  ext4   2.0G   61M  1.8G   4% /var/log
+tmpfs                       tmpfs  192M   12K  192M   1% /run/user/1000
+
+### $ swapon --show
+NAME      TYPE      SIZE USED PRIO
+/dev/dm-4 partition   2G   0B   -2
+
+### $ sudo vgs
+  VG     #PV #LV #SN Attr   VSize   VFree
+  vg_sys   1   5   0 wz--n- <24.00g <6.00g
+
+### $ sudo lvs -o lv_name,vg_name,lv_size,lv_time
+  LV      VG     LSize CTime
+  lv-home vg_sys 2.00g 2026-10-12 12:39:30 +0200
+  lv-log  vg_sys 2.00g 2026-10-12 12:39:30 +0200
+  lv-root vg_sys 8.00g 2026-10-12 12:39:29 +0200
+  lv-swap vg_sys 2.00g 2026-10-12 12:39:30 +0200
+  lv-var  vg_sys 4.00g 2026-10-12 12:39:29 +0200
+
+### $ findmnt --target /var/log
+TARGET   SOURCE                     FSTYPE OPTIONS
+/var/log /dev/mapper/vg_sys-lv--log ext4   rw,relatime
+
+### $ findmnt /tmp || echo "/tmp : pas de montage dédié"
+TARGET SOURCE FSTYPE OPTIONS
+/tmp   tmpfs  tmpfs  rw,nosuid,nodev,noatime,size=524288k,inode64
+
+### $ systemctl --failed
+  UNIT LOAD ACTIVE SUB DESCRIPTION
+
+0 loaded units listed.
+
+### $ timedatectl status
+               Local time: Mon 2026-10-26 20:14:12 CET
+           Universal time: Mon 2026-10-26 19:14:12 UTC
+                 RTC time: Mon 2026-10-26 19:14:13
+                Time zone: Europe/Paris (CET, +0100)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
+
+### $ localectl status
+System Locale: LANG=C.UTF-8
+    VC Keymap: (unset)
+   X11 Layout: fr
+    X11 Model: pc105
+
+### $ sudo passwd -S root
+root L 2026-09-09 0 99999 7 -1
+
+### $ id kosta; id mathis; id arsel
+uid=1001(kosta) gid=1001(kosta) groups=1001(kosta),27(sudo),100(users)
+uid=1002(mathis) gid=1002(mathis) groups=1002(mathis),27(sudo),100(users)
+uid=1003(arsel) gid=1003(arsel) groups=1003(arsel),27(sudo),100(users)
+
+### $ getent group wheel sudo
+sudo:x:27:fousta,kosta,mathis,arsel
+
+### $ sudo sshd -T | grep -Ei "permitrootlogin|passwordauthentication"
+permitrootlogin no
+passwordauthentication yes
+
+### $ ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens33            UP             192.168.224.131/24 metric 100 fe80::20c:29ff:fe8a:edf/64
+ens37            UP             10.42.0.2/24 fe80::20c:29ff:fe8a:ee9/64
+
+### $ grep -E "^(Start-Date|Commandline)" /var/log/apt/history.log | tail -6
+Start-Date: 2026-10-12  17:50:45
+Commandline: apt -y upgrade
+Start-Date: 2026-10-26  10:26:35
+Commandline: apt install ufw
+Start-Date: 2026-10-26  11:08:40
+Commandline: apt -y full-upgrade
+
+### $ sudo ufw status verbose
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), disabled (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+22/tcp (OpenSSH)           ALLOW IN    Anywhere
+22/tcp (OpenSSH (v6))      ALLOW IN    Anywhere (v6)
+
+
+### $ sudo aa-status | head -3
+apparmor module is loaded.
+102 profiles are loaded.
+8 profiles are in enforce mode.
+
+### $ sudo fdisk -l /dev/sda
+Disk /dev/sda: 25 GiB, 26843545600 bytes, 52428800 sectors
+Disk model: VMware Virtual S
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: F7B0B2E9-849E-4527-8AF7-A1B4A92EB38A
+
+Device       Start      End  Sectors Size Type
+/dev/sda1     2048     4095     2048   1M BIOS boot
+/dev/sda2     4096  2101247  2097152   1G Linux filesystem
+/dev/sda3  2101248 52426751 50325504  24G Linux filesystem
